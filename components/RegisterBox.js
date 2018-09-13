@@ -4,14 +4,11 @@ import cookie from "cookie";
 import redirect from "../lib/redirect";
 
 const CREATE_USER = gql`
-  mutation Create($name: String!, $email: String!, $password: String!) {
-    createUser(
-      name: $name
-      authProvider: { email: { email: $email, password: $password } }
-    ) {
-      id
+  mutation Create($email: String!, $password: String!) {
+    signupUser(email: $email, password: $password) {
+      token
     }
-    signinUser(email: { email: $email, password: $password }) {
+    authenticateUser(email: $email, password: $password) {
       token
     }
   }
@@ -25,9 +22,13 @@ const RegisterBox = ({ client }) => {
       mutation={CREATE_USER}
       onCompleted={data => {
         // Store the token in cookie
-        document.cookie = cookie.serialize("token", data.signinUser.token, {
-          maxAge: 30 * 24 * 60 * 60, // 30 days
-        });
+        document.cookie = cookie.serialize(
+          "token",
+          data.authenticateUser.token,
+          {
+            maxAge: 30 * 24 * 60 * 60, // 30 days
+          },
+        );
         // Force a reload of all the current queries now that the user is
         // logged in
         client.cache.reset().then(() => {
@@ -47,23 +48,15 @@ const RegisterBox = ({ client }) => {
 
             create({
               variables: {
-                name: name.value,
                 email: email.value,
                 password: password.value,
               },
             });
 
-            name.value = email.value = password.value = "";
+            email.value = password.value = "";
           }}
         >
           {error && <p>Issue occured while registering :(</p>}
-          <input
-            name="name"
-            placeholder="Name"
-            ref={node => {
-              name = node;
-            }}
-          />
           <br />
           <input
             name="email"
@@ -71,6 +64,7 @@ const RegisterBox = ({ client }) => {
             ref={node => {
               email = node;
             }}
+            type="text"
           />
           <br />
           <input

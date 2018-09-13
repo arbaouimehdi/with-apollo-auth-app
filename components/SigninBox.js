@@ -4,8 +4,8 @@ import cookie from "cookie";
 import redirect from "../lib/redirect";
 
 const SIGN_IN = gql`
-  mutation signinUser($email: String!, $password: String!) {
-    signinUser(email: { email: $email, password: $password }) {
+  mutation authenticateUser($email: String!, $password: String!) {
+    authenticateUser(email: $email, password: $password) {
       token
     }
   }
@@ -20,9 +20,13 @@ const SigninBox = ({ client }) => {
       mutation={SIGN_IN}
       onCompleted={data => {
         // Store the token in cookie
-        document.cookie = cookie.serialize("token", data.signinUser.token, {
-          maxAge: 30 * 24 * 60 * 60, // 30 days
-        });
+        document.cookie = cookie.serialize(
+          "token",
+          data.authenticateUser.token,
+          {
+            maxAge: 30 * 24 * 60 * 60, // 30 days
+          },
+        );
         // Force a reload of all the current queries now that the user is
         // logged in
         client.cache.reset().then(() => {
@@ -34,20 +38,20 @@ const SigninBox = ({ client }) => {
         console.log(error);
       }}
     >
-      {(signinUser, { data, error }) => (
+      {(authenticateUser, { data, error }) => (
         <form
           onSubmit={e => {
             e.preventDefault();
             e.stopPropagation();
 
-            signinUser({
+            authenticateUser({
               variables: {
                 email: email.value,
                 password: password.value,
               },
             });
 
-            email.value = password.value = "";
+            // email.value = password.value = "";
           }}
         >
           {error && <p>No user found with that information.</p>}
