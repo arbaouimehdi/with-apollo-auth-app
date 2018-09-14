@@ -23,12 +23,14 @@ export default class Signin extends React.Component {
     return (
       <React.Fragment>
         {/* SigninBox handles all login logic. */}
-        <SigninBox />
-        <hr />
-        New?{" "}
-        <Link prefetch href="/create-account">
-          <a>Create account</a>
-        </Link>
+        <div>
+          <SigninBox />
+          <hr />
+          New?{" "}
+          <Link prefetch href="/create-account">
+            <a>Create account</a>
+          </Link>
+        </div>
       </React.Fragment>
     );
   }

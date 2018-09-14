@@ -51,7 +51,7 @@ const SigninBox = ({ client }) => {
               },
             });
 
-            // email.value = password.value = "";
+            email.value = password.value = "";
           }}
         >
           {error && <p>No user found with that information.</p>}

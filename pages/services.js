@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { ApolloConsumer } from "react-apollo";
 
 import withAuth from "../lib/withAuth";
 
@@ -18,8 +17,4 @@ class Services extends Component {
   }
 }
 
-export default withAuth()(Services);
-
-// export default withAuth(session => session && session.getCurrentUser)(
-//   Dashboard,
-// );
+export default withAuth(session => session && session.user)(Services);
