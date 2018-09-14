@@ -1,0 +1,3 @@
+targets:
+  helloworld: shared-eu-west-1/cjm0t8yix3d280179nqmjmbog
+  default: helloworld
