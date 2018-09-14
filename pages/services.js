@@ -10,7 +10,7 @@ class Services extends Component {
     return (
       <div>
         <h1>Services</h1>
-        <span>current user: {this.props.userId}</span>
+        <span>current user: {this.props.user.email}</span>
       </div>
     );
   }
