@@ -17,27 +17,39 @@
 types: ./types.graphql
 
 functions:
-  # added by email-password template:
+  # added by auth template:
   signup:
     type: resolver
-    schema: src/email-password/signup.graphql
+    schema: src/authentication/signup.graphql
     handler:
-      code: src/email-password/signup.js
+      code: src/authentication/signup.js
 
   authenticate:
     type: resolver
-    schema: src/email-password/authenticate.graphql
+    schema: src/authentication/authenticate.graphql
     handler:
-      code: src/email-password/authenticate.js
+      code: src/authentication/authenticate.js
 
   loggedInUser:
     type: resolver
-    schema: src/email-password/loggedInUser.graphql
+    schema: src/authentication/loggedInUser.graphql
     handler:
-      code: src/email-password/loggedInUser.js
+      code: src/authentication/loggedInUser.js
 
-# Your root tokens used for functions to get full access to the API
+# Model/Relation permissions are used to limit the API access
+# To take the burden of thinking about those while development, we
+# preconfigured the wildcard ("*") permission that allows everything
 # Read more here:
-# https://docs-next.graph.cool/reference/auth/authentication/authentication-tokens-eip7ahqu5o
+# https://docs-next.graph.cool/reference/auth/authorization/overview-iegoo0heez
+permissions:
+  - operation: User.read
+    fields:
+      - id
+      - name
+      - email
+
+  # Your root tokens used for functions to get full access to the API
+  # Read more here:
+  # https://docs-next.graph.cool/reference/auth/authentication/authentication-tokens-eip7ahqu5o
 rootTokens:
   - mytoken
