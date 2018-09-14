@@ -8,6 +8,7 @@ import SigninBox from "../components/SigninBox";
 
 export default class Signin extends React.Component {
   static async getInitialProps(context) {
+    console.log(context);
     const { loggedInUser } = await checkLoggedIn(context.apolloClient);
 
     if (loggedInUser.user) {

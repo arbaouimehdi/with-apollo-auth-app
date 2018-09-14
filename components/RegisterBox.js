@@ -4,8 +4,8 @@ import cookie from "cookie";
 import redirect from "../lib/redirect";
 
 const CREATE_USER = gql`
-  mutation Create($email: String!, $password: String!) {
-    signupUser(email: $email, password: $password) {
+  mutation Create($name: String!, $email: String!, $password: String!) {
+    signupUser(name: $name, email: $email, password: $password) {
       token
     }
     # authenticateUser(email: $email, password: $password) {
@@ -48,15 +48,25 @@ const RegisterBox = ({ client }) => {
 
             create({
               variables: {
+                name: name.value,
                 email: email.value,
                 password: password.value,
               },
             });
 
-            email.value = password.value = "";
+            name.value = email.value = password.value = "";
           }}
         >
           {error && <p>Issue occured while registering :(</p>}
+          <br />
+          <input
+            name="name"
+            placeholder="Name"
+            ref={node => {
+              name = node;
+            }}
+            type="text"
+          />
           <br />
           <input
             name="email"
