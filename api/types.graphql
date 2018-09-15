@@ -18,6 +18,9 @@ type User @model {
   accountActivationCode: AccountActivationCode
     @relation(name: "AccountActivationCodeOnUser")
   accountActivated: Boolean @defaultValue(value: false)
+
+  # Reset Password
+  resetPassword: PasswordResetCode @relation(name: "PasswordResetCodeOnUser")
 }
 
 # Account Activation
@@ -25,4 +28,11 @@ type AccountActivationCode @model {
   id: ID! @isUnique
   createdAt: DateTime!
   user: User @relation(name: "AccountActivationCodeOnUser")
+}
+
+# Reset Password
+type PasswordResetCode @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  user: User @relation(name: "PasswordResetCodeOnUser")
 }
