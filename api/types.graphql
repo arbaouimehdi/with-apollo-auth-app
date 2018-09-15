@@ -13,9 +13,4 @@ type User @model {
   website: String
   email: String @isUnique
   password: String
-
-  # Confirmation Email Fields
-  confirmToken: String
-  confirmExpires: DateTime
-  confirmed: Boolean! @defaultValue(value: false)
 }
