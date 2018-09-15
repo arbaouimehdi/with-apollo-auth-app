@@ -1,6 +1,7 @@
 const fromEvent = require("graphcool-lib").fromEvent;
 const bcrypt = require("bcryptjs");
 const validator = require("validator");
+const crypto = require("crypto");
 
 function getGraphcoolUser(api, email) {
   return api
@@ -21,6 +22,15 @@ function getGraphcoolUser(api, email) {
     });
 }
 
+function generateToken() {
+  return crypto.randomBytes(20).toString("hex");
+}
+
+function generateExpiration() {
+  const now = new Date();
+  return new Date(now.getTime() + 3600000).toISOString();
+}
+
 function createGraphcoolUser(api, email, passwordHash, name, website) {
   return api
     .request(
@@ -31,6 +41,9 @@ function createGraphcoolUser(api, email, passwordHash, name, website) {
         password: "${passwordHash}",
         name: "${name}",
         website: "${website}",
+
+        confirmToken: "${generateToken()}",
+        confirmExpires: "${generateExpiration()}"
       ) {
         id
       }
