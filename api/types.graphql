@@ -13,4 +13,16 @@ type User @model {
   website: String
   email: String @isUnique
   password: String
+
+  # Email verification
+  accountActivationCode: AccountActivationCode
+    @relation(name: "AccountActivationCodeOnUser")
+  accountActivated: Boolean @defaultValue(value: false)
+}
+
+# Account Activation
+type AccountActivationCode @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  user: User @relation(name: "AccountActivationCodeOnUser")
 }

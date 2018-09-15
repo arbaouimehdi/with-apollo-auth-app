@@ -36,6 +36,25 @@ functions:
     handler:
       code: src/authentication/loggedInUser.js
 
+  #send verification email - creates and sends uuid with url to user
+  sendAccountActivationEmail:
+    type: resolver
+    schema: src/email-verification/sendAccountActivationEmail.graphql
+    handler:
+      code:
+        src: src/email-verification/sendAccountActivationEmail.ts
+        environment:
+          MAILGUN_API_KEY: MAILGUN_API_KEY
+          MAILGUN_SUBDOMAIN: mail.your-domain.com
+          ACCOUNT_ACTIVATION_URL: https://www.YOUR_DOMAIN.com/activate-account
+
+  # handles verification of user's email using supplied verification code
+  activateAccount:
+    type: resolver
+    schema: src/email-verification/activateAccount.graphql
+    handler:
+      code: src/email-verification/activateAccount.ts
+
 # Model/Relation permissions are used to limit the API access
 # To take the burden of thinking about those while development, we
 # preconfigured the wildcard ("*") permission that allows everything
