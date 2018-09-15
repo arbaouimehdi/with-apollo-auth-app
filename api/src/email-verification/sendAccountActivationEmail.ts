@@ -21,7 +21,7 @@ const MAILGUN_API_KEY = process.env["MAILGUN_API_KEY"];
 const MAILGUN_SUBDOMAIN = process.env["MAILGUN_SUBDOMAIN"];
 const ACCOUNT_ACTIVATION_URL = process.env["ACCOUNT_ACTIVATION_URL"];
 
-const apiKey = `api:key-${MAILGUN_API_KEY}`;
+const apiKey = `api:${MAILGUN_API_KEY}`;
 const mailgunUrl = `https://api.mailgun.net/v3/${MAILGUN_SUBDOMAIN}/messages`;
 
 export default async (event: FunctionEvent<EventData>) => {
@@ -31,9 +31,12 @@ export default async (event: FunctionEvent<EventData>) => {
   }
 
   // check if root
-  // if (event.context.auth.token!==event.context.graphcool.rootToken) {
-  if (event.context.auth.typeName !== "PAT") {
-    return { error: "Insufficient permissions 1" };
+  // if (event.context.auth.token !== event.context.graphcool.rootToken) {
+  // Danger zone: this line has to be modified
+  if (event.context.auth.typeName !== "User") {
+    return {
+      error: `Insufficient permissions 1: ${event.context.auth.typeName}`,
+    };
   }
 
   try {
@@ -58,7 +61,7 @@ export default async (event: FunctionEvent<EventData>) => {
 
     // // 3. Prepare body of POST request
     const form = new FormData();
-    form.append("from", `Team <no-reply@your-domain.com>`);
+    form.append("from", `Team <mailgun@${MAILGUN_SUBDOMAIN}>`);
     form.append("to", `${name} <${email}>`);
     form.append("subject", "Activate your account");
     form.append(
@@ -84,7 +87,14 @@ export default async (event: FunctionEvent<EventData>) => {
     }).then(res => res);
 
     if (!resultOfMailGunPost || resultOfMailGunPost.status !== 200) {
-      return { error: "Failed to send email with mailgun" };
+      return {
+        error: `
+        Failed to send email with mailgun:
+        MAILGUN_API_KEY: ${MAILGUN_API_KEY}
+        MAILGUN_SUBDOMAIN: ${MAILGUN_SUBDOMAIN}
+        ACCOUNT_ACTIVATION_URL: ${ACCOUNT_ACTIVATION_URL}
+      `,
+      };
     }
 
     return { data: { result: true } };
