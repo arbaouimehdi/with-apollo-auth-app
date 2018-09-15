@@ -9,7 +9,7 @@ type User @model {
   updatedAt: DateTime!
 
   # User Fields
-  name: String
+  name: String! @migrationValue(value: "No name yet")
   website: String
   email: String @isUnique
   password: String
