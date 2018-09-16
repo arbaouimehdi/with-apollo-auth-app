@@ -87,6 +87,18 @@ functions:
           MAILGUN_SUBDOMAIN: sandbox8a05d2181dc84b9c8764b6b9f414a98c.mailgun.org
           LOGIN_URL: https://localhost:3000/change-password
 
+# Model/Relation permissions are used to limit the API access
+# To take the burden of thinking about those while development, we
+# preconfigured the wildcard ("*") permission that allows everything
+# Read more here:
+# https://docs-next.graph.cool/reference/auth/authorization/overview-iegoo0heez
+permissions:
+  - operation: User.read
+    fields:
+      - id
+      - name
+      - email
+
 # Your root tokens used for functions to get full access to the API
 # Read more here:
 # https://www.graph.cool/docs/reference/auth/authentication/authentication-tokens-eip7ahqu5o
