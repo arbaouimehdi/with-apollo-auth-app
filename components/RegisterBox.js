@@ -4,28 +4,18 @@ import cookie from "cookie";
 import redirect from "../lib/redirect";
 
 const CREATE_USER = gql`
-  mutation Create(
-    $name: String!
-    $website: String
-    $email: String!
-    $password: String!
-  ) {
-    signupUser(
-      name: $name
-      website: $website
-      email: $email
-      password: $password
-    ) {
+  mutation Create($name: String!, $email: String!, $password: String!) {
+    signupUser(name: $name, email: $email, password: $password) {
       token
     }
-    # authenticateUser(email: $email, password: $password) {
-    #   token
-    # }
+    authenticateUser(email: $email, password: $password) {
+      token
+    }
   }
 `;
 
 const RegisterBox = ({ client }) => {
-  let name, website, email, password;
+  let name, email, password;
 
   return (
     <Mutation
@@ -59,13 +49,12 @@ const RegisterBox = ({ client }) => {
             create({
               variables: {
                 name: name.value,
-                website: website.value,
                 email: email.value,
                 password: password.value,
               },
             });
 
-            name.value = email.value = password.value = website.value = "";
+            name.value = email.value = password.value = "";
           }}
         >
           {error && <p>Issue occured while registering :(</p>}
@@ -75,15 +64,6 @@ const RegisterBox = ({ client }) => {
             placeholder="Name"
             ref={node => {
               name = node;
-            }}
-            type="text"
-          />
-          <br />
-          <input
-            name="website"
-            placeholder="Website"
-            ref={node => {
-              website = node;
             }}
             type="text"
           />
