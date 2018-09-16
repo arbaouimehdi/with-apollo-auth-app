@@ -8,9 +8,9 @@ const CREATE_USER = gql`
     signupUser(name: $name, email: $email, password: $password) {
       token
     }
-    authenticateUser(email: $email, password: $password) {
-      token
-    }
+    # authenticateUser(email: $email, password: $password) {
+    #   token
+    # }
   }
 `;
 

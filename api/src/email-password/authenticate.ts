@@ -37,6 +37,10 @@ export default async (event: FunctionEvent<EventData>) => {
       return { error: "Invalid credentials!" };
     }
 
+    if (!user.accountActivated) {
+      return { error: "The account is not activated, please check your email" };
+    }
+
     // generate node token for existing User node
     const token = await graphcool.generateNodeToken(user.id, "User");
 
