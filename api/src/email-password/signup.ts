@@ -25,7 +25,11 @@ export default async (event: FunctionEvent<EventData>) => {
     const { name, email, password } = event.data;
 
     if (!validator.isEmail(email)) {
-      return { error: "Not a valid email" };
+      return {
+        error: {
+          message: "Not a valid email",
+        },
+      };
     }
 
     // check if user exists already
@@ -33,7 +37,11 @@ export default async (event: FunctionEvent<EventData>) => {
       r => r.User !== null,
     );
     if (userExists) {
-      return { error: "Email already in use" };
+      return {
+        error: {
+          message: "Email already in use",
+        },
+      };
     }
 
     // create password hash
@@ -49,7 +57,11 @@ export default async (event: FunctionEvent<EventData>) => {
     return { data: { id: userId, token } };
   } catch (e) {
     console.log(e);
-    return { error: "An unexpected error occured during signup." };
+    return {
+      error: {
+        message: "An unexpected error occured during signup.",
+      },
+    };
   }
 };
 

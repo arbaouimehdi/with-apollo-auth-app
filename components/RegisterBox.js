@@ -57,7 +57,10 @@ const RegisterBox = ({ client }) => {
             name.value = email.value = password.value = "";
           }}
         >
-          {error && <p>Issue occured while registering :(</p>}
+          {error &&
+            error.graphQLErrors.map(({ functionError }, index) => (
+              <p key={`error-${index}`}>{functionError.message}</p>
+            ))}
           <br />
           <input
             name="name"

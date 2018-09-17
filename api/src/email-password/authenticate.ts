@@ -28,17 +28,29 @@ export default async (event: FunctionEvent<EventData>) => {
 
     // no user with this email
     if (!user) {
-      return { error: "Invalid credentials!" };
+      return {
+        error: {
+          message: "No user with this email exist!",
+        },
+      };
     }
 
     // check password
     const passwordIsCorrect = await bcrypt.compare(password, user.password);
     if (!passwordIsCorrect) {
-      return { error: "Invalid credentials!" };
+      return {
+        error: {
+          message: "Invalid credentials!",
+        },
+      };
     }
 
     if (!user.accountActivated) {
-      return { error: "The account is not activated, please check your email" };
+      return {
+        error: {
+          message: "The account is not activated, please check your email",
+        },
+      };
     }
 
     // generate node token for existing User node
@@ -47,7 +59,11 @@ export default async (event: FunctionEvent<EventData>) => {
     return { data: { id: user.id, token } };
   } catch (e) {
     console.log(e);
-    return { error: "An unexpected error occured during authentication." };
+    return {
+      error: {
+        message: "An unexpected error occured during authentication.",
+      },
+    };
   }
 };
 

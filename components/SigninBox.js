@@ -34,8 +34,9 @@ const SigninBox = ({ client }) => {
         });
       }}
       onError={error => {
-        // If you want to send error to external service?
-        console.log(error);
+        error.graphQLErrors.map(({ functionError }) =>
+          console.log(functionError.message),
+        );
       }}
     >
       {(authenticateUser, { data, error }) => (
@@ -54,7 +55,10 @@ const SigninBox = ({ client }) => {
             email.value = password.value = "";
           }}
         >
-          {error && <p>No user found with that information.</p>}
+          {error &&
+            error.graphQLErrors.map(({ functionError }, index) => (
+              <p key={`error-${index}`}>{functionError.message}</p>
+            ))}
           <input
             name="email"
             placeholder="Email"
