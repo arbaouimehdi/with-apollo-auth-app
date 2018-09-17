@@ -9,12 +9,10 @@ export default class Index extends React.Component {
   static async getInitialProps(context, apolloClient) {
     const { loggedInUser } = await checkLoggedIn(context.apolloClient);
 
-    console.log(loggedInUser);
-
-    // if (!loggedInUser.id) {
-    //   // If not signed in, send them somewhere more useful
-    //   redirect(context, "/signin");
-    // }
+    if (!loggedInUser.user) {
+      // If not signed in, send them somewhere more useful
+      redirect(context, "/signin");
+    }
 
     return { loggedInUser };
   }
