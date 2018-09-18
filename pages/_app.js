@@ -6,10 +6,11 @@ import withApollo from "../lib/withApollo";
 class MyApp extends App {
   render() {
     const { Component, pageProps, apolloClient } = this.props;
+
     return (
       <Container>
         <ApolloProvider client={apolloClient}>
-          <Component {...pageProps} />
+          <Component {...pageProps} query={this.props.router.query} />
         </ApolloProvider>
       </Container>
     );

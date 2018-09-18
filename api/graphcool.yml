@@ -98,6 +98,11 @@ permissions:
       - id
       - name
       - email
+      - accountActivated
+
+  - operation: AccountActivationCode.read
+    fields:
+      - id
 
 # Your root tokens used for functions to get full access to the API
 # Read more here:
