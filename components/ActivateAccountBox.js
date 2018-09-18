@@ -1,15 +1,14 @@
 import React from "react";
-import { Mutation, withApollo } from "react-apollo";
+import { withApollo, Query } from "react-apollo";
 import gql from "graphql-tag";
-import cookie from "cookie";
-import { graphql } from "react-apollo";
 import redirect from "../lib/redirect";
 
-// Mutation : Activate the Account
-const ACTIVATE_ACCOUNT = gql`
-  mutation ActivateAccount($activationCode: ID!) {
-    activateAccount(id: $activationCode) {
-      result
+const ACTIVATION_CODE = gql`
+  query checkActivation($activationCode: ID!) {
+    AccountActivationCode(id: $activationCode) {
+      user {
+        accountActivated
+      }
     }
   }
 `;
@@ -17,30 +16,40 @@ const ACTIVATE_ACCOUNT = gql`
 class ActivateAccountBox extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      message: "",
+    };
+  }
+
+  componentDidMount() {
+    const { activateAccount, activationStatus } = this.props;
+
+    console.log(this.props);
+
+    // If the Code Activation doesn't exist
+    if (activationStatus == "DOESNT EXIST") {
+      // Redirect the User to the login page
+      redirect({}, "/signin");
+    }
+
+    // If the Account is not activated
+    if (activationStatus == "NOT ACTIVATED") {
+      // Activate the account
+      activateAccount();
+      this.setState({
+        message: "Account activated successfully <a href='/signin'>Signin</a>",
+      });
+    }
+
+    // If the Account is already activated
+    if (activationStatus == "ALREADY ACTIVATED") {
+      // Show The success message plus the login page
+      redirect({}, "/signin");
+    }
   }
 
   render() {
-    return (
-      <Mutation mutation={ACTIVATE_ACCOUNT}>
-        {(activateAccount, { loading, error }) => (
-          <div>
-            <a
-              href="#"
-              onClick={e => {
-                e.preventDefault();
-                activateAccount({
-                  variables: { activationCode: this.props.activationCode },
-                });
-              }}
-            >
-              Validate
-            </a>
-            {loading && <p>Loading...</p>}
-            {error && <p>Error :( Please try again</p>}
-          </div>
-        )}
-      </Mutation>
-    );
+    return <div>{this.state.message}</div>;
   }
 }
 

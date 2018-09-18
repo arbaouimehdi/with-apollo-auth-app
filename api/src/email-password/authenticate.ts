@@ -10,6 +10,7 @@ interface User {
 interface EventData {
   email: string;
   password: string;
+  accountActivated: boolean;
 }
 
 const SALT_ROUNDS = 10;
@@ -21,7 +22,7 @@ export default async (event: FunctionEvent<EventData>) => {
     const graphcool = fromEvent(event);
     const api = graphcool.api("simple/v1");
 
-    const { email, password } = event.data;
+    const { email, password, accountActivated } = event.data;
 
     // get user by email
     const user: User = await getUserByEmail(api, email).then(r => r.User);
@@ -45,10 +46,12 @@ export default async (event: FunctionEvent<EventData>) => {
       };
     }
 
+    // check activation
     if (!user.accountActivated) {
       return {
         error: {
-          message: "The account is not activated, please check your email",
+          message:
+            "The account is not activated, please check your email for the activation url",
         },
       };
     }
@@ -76,6 +79,7 @@ async function getUserByEmail(
       User(email: $email) {
         id
         password
+        accountActivated
       }
     }
   `;
