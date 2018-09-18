@@ -11,6 +11,22 @@ const CREATE_USER = gql`
   }
 `;
 
+const SEND_CONFIRMATION = gql`
+  mutation SendConfirmation(
+    $userId: String!
+    $userName: String!
+    $userEmail: String!
+  ) {
+    sendAccountActivationEmail(
+      id: $userId
+      name: $userName
+      email: $userEmail
+    ) {
+      result
+    }
+  }
+`;
+
 const RegisterBox = ({ client }) => {
   let name, email, password;
 
@@ -19,13 +35,9 @@ const RegisterBox = ({ client }) => {
       mutation={CREATE_USER}
       onCompleted={data => {
         // Store the token in cookie
-        document.cookie = cookie.serialize(
-          "token",
-          data.authenticateUser.token,
-          {
-            maxAge: 30 * 24 * 60 * 60, // 30 days
-          },
-        );
+        document.cookie = cookie.serialize("token", data.signupUser.token, {
+          maxAge: 30 * 24 * 60 * 60, // 30 days
+        });
         // Force a reload of all the current queries now that the user is
         // logged in
         client.cache.reset().then(() => {

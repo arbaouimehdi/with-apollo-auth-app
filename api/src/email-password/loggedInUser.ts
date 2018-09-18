@@ -3,6 +3,7 @@ import { GraphQLClient } from "graphql-request";
 
 interface User {
   id: string;
+  accountActivated: boolean;
 }
 
 export default async (event: FunctionEvent<{}>) => {
@@ -22,7 +23,8 @@ export default async (event: FunctionEvent<{}>) => {
     const user: User = await getUser(api, userId).then(r => r.User);
 
     // no logged in user
-    if (!user || !user.id) {
+    // or the account is not activated
+    if (!user || !user.id || !user.accountActivated) {
       return { data: null };
     }
 
@@ -38,6 +40,7 @@ async function getUser(api: GraphQLClient, id: string): Promise<{ User }> {
     query getUser($id: ID!) {
       User(id: $id) {
         id
+        accountActivated
       }
     }
   `;

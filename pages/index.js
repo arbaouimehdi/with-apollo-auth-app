@@ -9,8 +9,8 @@ export default class Index extends React.Component {
   static async getInitialProps(context, apolloClient) {
     const { loggedInUser } = await checkLoggedIn(context.apolloClient);
 
+    // If not signed in, send them somewhere more useful
     if (!loggedInUser.user) {
-      // If not signed in, send them somewhere more useful
       redirect(context, "/signin");
     }
 
@@ -35,7 +35,7 @@ export default class Index extends React.Component {
       <ApolloConsumer>
         {client => (
           <div>
-            Hello!
+            Hello! {this.props.loggedInUser.user.email}
             <br />
             <button onClick={this.signout(client)}>Sign out</button>
           </div>
