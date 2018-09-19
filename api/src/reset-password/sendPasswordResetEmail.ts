@@ -47,12 +47,20 @@ export default async (event: FunctionEvent<EventData>) => {
 
     // no user with this email
     if (!user) {
-      return { error: "Error on password reset" };
+      return {
+        error: {
+          message: "No User exist with this email",
+        },
+      };
     }
 
     // check if email has been verified
     if (!user.accountActivated) {
-      return { error: "Email not verified!" };
+      return {
+        error: {
+          message: "Email not verified!",
+        },
+      };
     }
 
     const passwordResetCode: string = await createPasswordResetCode(
@@ -62,10 +70,14 @@ export default async (event: FunctionEvent<EventData>) => {
 
     // no data with this response
     if (!passwordResetCode) {
-      return { error: "error on createPasswordResetCode" };
+      return {
+        error: {
+          message: "error on createPasswordResetCode",
+        },
+      };
     }
 
-    const passwordResetUrl = `${PASSWORD_RESET_URL}/?passwordResetCode=${passwordResetCode}`;
+    const passwordResetUrl = `${PASSWORD_RESET_URL}?passwordResetCode=${passwordResetCode}`;
 
     // // 3. Prepare body of POST request
     const form = new FormData();
@@ -85,7 +97,11 @@ export default async (event: FunctionEvent<EventData>) => {
     }).then(res => res);
 
     if (!resultOfMailGunPost) {
-      return { error: "Failed to send email with mailgun" };
+      return {
+        error: {
+          message: "Failed to send email",
+        },
+      };
     }
 
     return { data: { result: true } };
@@ -94,8 +110,10 @@ export default async (event: FunctionEvent<EventData>) => {
   } catch (e) {
     console.log(e);
     return {
-      error:
-        "An unexpected error occured during creation of passwordResetCode and sending the URL.",
+      error: {
+        message:
+          "An unexpected error occured during creation of passwordResetCode and sending the URL.",
+      },
     };
   }
 };
