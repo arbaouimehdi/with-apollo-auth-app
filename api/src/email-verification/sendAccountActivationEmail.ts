@@ -57,7 +57,7 @@ export default async (event: FunctionEvent<EventData>) => {
       return { error: "error on createUserVerification" };
     }
 
-    const accountActivationUrl = `${ACCOUNT_ACTIVATION_URL}/?accountActivationCode=${accountActivationCode}`;
+    const accountActivationUrl = `${ACCOUNT_ACTIVATION_URL}?accountActivationCode=${accountActivationCode}`;
 
     // // 3. Prepare body of POST request
     const form = new FormData();

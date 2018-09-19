@@ -5,6 +5,8 @@ import * as validator from "validator";
 
 interface User {
   id: string;
+  name: string;
+  email: string;
 }
 
 interface EventData {
@@ -54,7 +56,7 @@ export default async (event: FunctionEvent<EventData>) => {
     // generate node token for new User node
     const token = await graphcool.generateNodeToken(userId, "User");
 
-    return { data: { id: userId, token } };
+    return { data: { id: userId, token, name, email } };
   } catch (e) {
     console.log(e);
     return {
@@ -95,6 +97,8 @@ async function createGraphcoolUser(
         password: $password
       ) {
         id
+        name
+        email
       }
     }
   `;
