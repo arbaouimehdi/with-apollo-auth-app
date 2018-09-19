@@ -104,7 +104,7 @@ export default async (event: FunctionEvent<EventData>) => {
       };
     }
 
-    return { data: { result: passwordResetCode } };
+    return { data: { result: true } };
 
     // return resultOfMailGunPost;
   } catch (e) {
