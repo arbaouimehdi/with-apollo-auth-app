@@ -73,7 +73,7 @@ functions:
         environment:
           MAILGUN_API_KEY: 0882213544ae6fa295d999b489755ac8-7bbbcb78-59fd80ce
           MAILGUN_SUBDOMAIN: sandbox8a05d2181dc84b9c8764b6b9f414a98c.mailgun.org
-          PASSWORD_RESET_URL: https://localhost:3000/password-reset-confirmation
+          PASSWORD_RESET_URL: https://localhost:3000/reset-password-confirmation
 
   # reset user password
   resetPassword:
@@ -99,8 +99,13 @@ permissions:
       - name
       - email
       - accountActivated
+      - resetPassword
 
   - operation: AccountActivationCode.read
+    fields:
+      - id
+
+  - operation: PasswordResetCode.read
     fields:
       - id
 
