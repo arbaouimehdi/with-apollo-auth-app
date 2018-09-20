@@ -123,6 +123,10 @@ class SigninBox extends Component {
                   required
                 />
                 <br />
+<<<<<<< HEAD
+=======
+                {JSON.stringify(this.state.formErrors)}
+>>>>>>> 175a51a92983a789177197539f638b7f43a0c16f
                 <button
                   disabled={
                     this.state.formErrors.email.isEmail &&
