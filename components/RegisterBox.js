@@ -44,7 +44,7 @@ class RegisterBox extends React.Component {
             this.handleError(error);
           }}
         >
-          {(create, { data, error }) => (
+          {(create, { loading, error, data }) => (
             <div>
               <form
                 onSubmit={e => {
@@ -62,6 +62,8 @@ class RegisterBox extends React.Component {
                   name.value = email.value = password.value = "";
                 }}
               >
+                {loading && <div>Loading</div>}
+
                 {error &&
                   error.graphQLErrors.map(({ functionError }, index) => (
                     <p key={`error-${index}`}>{functionError.message}</p>

@@ -35,40 +35,44 @@ class SendResetPasswordBox extends Component {
             this.handleError(error);
           }}
         >
-          {(sendResetPassword, { data, error }) => (
-            <form
-              onSubmit={e => {
-                e.preventDefault();
-                e.stopPropagation();
+          {(sendResetPassword, { loading, error, data }) => {
+            return (
+              <form
+                onSubmit={e => {
+                  e.preventDefault();
+                  e.stopPropagation();
 
-                sendResetPassword({
-                  variables: {
-                    userEmail: email.value,
-                  },
-                });
+                  sendResetPassword({
+                    variables: {
+                      userEmail: email.value,
+                    },
+                  });
 
-                email.value = "";
-              }}
-            >
-              {error &&
-                error.graphQLErrors.map(({ functionError }, index) => (
-                  <p key={`error-${index}`}>
-                    {functionError ? functionError.message : ""}
-                  </p>
-                ))}
-
-              <input
-                name="email"
-                placeholder="Email"
-                ref={node => {
-                  email = node;
+                  email.value = "";
                 }}
-                type="text"
-              />
-              <br />
-              <button>Send Password</button>
-            </form>
-          )}
+              >
+                {loading && <div>loading</div>}
+
+                {error &&
+                  error.graphQLErrors.map(({ functionError }, index) => (
+                    <p key={`error-${index}`}>
+                      {functionError ? functionError.message : ""}
+                    </p>
+                  ))}
+
+                <input
+                  name="email"
+                  placeholder="Email"
+                  ref={node => {
+                    email = node;
+                  }}
+                  type="text"
+                />
+                <br />
+                <button>Send Password</button>
+              </form>
+            );
+          }}
         </Mutation>
       );
     }

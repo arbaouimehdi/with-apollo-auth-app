@@ -32,48 +32,52 @@ const SigninBox = ({ client }) => {
         );
       }}
     >
-      {(authenticateUser, { data, error }) => (
-        <div>
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              e.stopPropagation();
+      {(authenticateUser, { loading, error, data }) => {
+        return (
+          <div>
+            <form
+              onSubmit={e => {
+                e.preventDefault();
+                e.stopPropagation();
 
-              authenticateUser({
-                variables: {
-                  email: email.value,
-                  password: password.value,
-                },
-              });
+                authenticateUser({
+                  variables: {
+                    email: email.value,
+                    password: password.value,
+                  },
+                });
 
-              email.value = password.value = "";
-            }}
-          >
-            {error &&
-              error.graphQLErrors.map(({ functionError }, index) => (
-                <p key={`error-${index}`}>{functionError.message}</p>
-              ))}
-            <input
-              name="email"
-              placeholder="Email"
-              ref={node => {
-                email = node;
+                email.value = password.value = "";
               }}
-            />
-            <br />
-            <input
-              name="password"
-              placeholder="Password"
-              ref={node => {
-                password = node;
-              }}
-              type="password"
-            />
-            <br />
-            <button>Sign in</button>
-          </form>
-        </div>
-      )}
+            >
+              {loading && <div>Loading</div>}
+
+              {error &&
+                error.graphQLErrors.map(({ functionError }, index) => (
+                  <p key={`error-${index}`}>{functionError.message}</p>
+                ))}
+              <input
+                name="email"
+                placeholder="Email"
+                ref={node => {
+                  email = node;
+                }}
+              />
+              <br />
+              <input
+                name="password"
+                placeholder="Password"
+                ref={node => {
+                  password = node;
+                }}
+                type="password"
+              />
+              <br />
+              <button>Sign in</button>
+            </form>
+          </div>
+        );
+      }}
     </Mutation>
   );
 };
