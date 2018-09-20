@@ -75,6 +75,7 @@ class RegisterBox extends React.Component {
                     name = node;
                   }}
                   type="text"
+                  required
                 />
                 <br />
                 <input
@@ -83,7 +84,8 @@ class RegisterBox extends React.Component {
                   ref={node => {
                     email = node;
                   }}
-                  type="text"
+                  type="email"
+                  required
                 />
                 <br />
                 <input
@@ -93,6 +95,7 @@ class RegisterBox extends React.Component {
                     password = node;
                   }}
                   type="password"
+                  required
                 />
                 <br />
                 <button>Register</button>
