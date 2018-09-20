@@ -1,10 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import Link from "next/link";
+import { withApollo } from "react-apollo";
 
-export default class Nav extends Component {
+class Nav extends React.Component {
   render() {
     return (
       <div>
+        <Link prefetch href="/">
+          <a>Home</a>
+        </Link>
+        &nbsp;-&nbsp;
         <Link prefetch href="/services">
           <a>Services</a>
         </Link>
@@ -25,3 +30,5 @@ export default class Nav extends Component {
     );
   }
 }
+
+export default withApollo(Nav);

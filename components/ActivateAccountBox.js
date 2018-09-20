@@ -26,7 +26,7 @@ class ActivateAccountBox extends React.Component {
       // Activate the account
       activateAccount();
       this.setState({
-        message: "Account activated successfully <a href='/signin'>Signin</a>",
+        message: "Account activated successfully",
       });
     }
 

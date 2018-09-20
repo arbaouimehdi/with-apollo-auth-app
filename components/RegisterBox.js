@@ -29,6 +29,10 @@ class RegisterBox extends React.Component {
         <Mutation
           mutation={CREATE_USER}
           onCompleted={data => {
+            document.cookie = cookie.serialize("token", data.signupUser.token, {
+              maxAge: 30 * 24 * 60 * 60, // 30 days
+            });
+
             this.setState({
               createAccountStatus: "CREATED",
               userId: data.signupUser.id,
