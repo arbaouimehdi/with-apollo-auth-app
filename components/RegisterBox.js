@@ -59,7 +59,7 @@ class RegisterBox extends React.Component {
                     },
                   });
 
-                  name.value = email.value = password.value = "";
+                  // name.value = email.value = password.value = "";
                 }}
               >
                 {loading && <div>Loading</div>}

@@ -27,58 +27,27 @@ export default async (event: FunctionEvent<EventData>) => {
     const api = graphcool.api("simple/v1");
 
     const { name, email, password } = event.data;
+    const error_messages = {
+      name: [],
+      email: [],
+      password: [],
+    };
 
-    /**
-     *
-     * Name Validations
-     *
-     */
-
-    // not empty
-    if (validator.isEmpty(name)) {
+    if (
+      // name - alphabet only
+      !validator.isAlpha(name) ||
+      // name - between 4 & 20 characters
+      !validator.isLength(name, { min: 4, max: 20 }) ||
+      // email - not empty
+      validator.isEmpty(email) ||
+      // email - valid email & alphanumeric
+      !validator.isEmail(validator.escape(email)) ||
+      // password - between 4 and 10
+      !validator.isLength(password, { min: 4, max: 10 })
+    ) {
       return {
         error: {
-          message: "Name is empty",
-        },
-      };
-    }
-
-    // alphabet only
-    if (!validator.isAlpha(name)) {
-      return {
-        error: {
-          message: "Please enter alphabetes only",
-        },
-      };
-    }
-
-    // minimum 4 characters
-    if (!validator.isLength(name, { min: 4 })) {
-      return {
-        error: {
-          message: "Please Choose 4 or more character for full name",
-        },
-      };
-    }
-
-    // maximum 20 characters
-    if (!validator.isLength(name, { max: 20 })) {
-      return {
-        error: {
-          message: "The Full Name is too long",
-        },
-      };
-    }
-
-    /**
-     *
-     * Email Validations
-     *
-     */
-    if (!validator.isEmail(email)) {
-      return {
-        error: {
-          message: "Not a valid email",
+          message: "Signup Failed",
         },
       };
     }
