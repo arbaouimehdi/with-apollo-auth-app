@@ -66,7 +66,8 @@ class SendResetPasswordBox extends Component {
                   ref={node => {
                     email = node;
                   }}
-                  type="text"
+                  type="email"
+                  required
                 />
                 <br />
                 <button>Send Password</button>

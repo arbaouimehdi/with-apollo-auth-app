@@ -63,6 +63,7 @@ const SigninBox = ({ client }) => {
                   email = node;
                 }}
                 type="text"
+                required
               />
               <br />
               <input
@@ -72,6 +73,7 @@ const SigninBox = ({ client }) => {
                   password = node;
                 }}
                 type="password"
+                required
               />
               <br />
               <button>Sign in</button>
