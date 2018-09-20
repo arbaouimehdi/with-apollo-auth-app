@@ -21,6 +21,7 @@ export default class Signin extends React.Component {
   render() {
     return (
       <React.Fragment>
+        <h1>Login</h1>
         <SigninBox />
       </React.Fragment>
     );
