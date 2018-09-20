@@ -62,6 +62,7 @@ const SigninBox = ({ client }) => {
                 ref={node => {
                   email = node;
                 }}
+                type="text"
               />
               <br />
               <input

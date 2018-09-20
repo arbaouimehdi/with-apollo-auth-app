@@ -1,6 +1,7 @@
 import { fromEvent, FunctionEvent } from "graphcool-lib";
 import { GraphQLClient } from "graphql-request";
 import * as bcrypt from "bcryptjs";
+import * as validator from "validator";
 
 interface User {
   id: string;
@@ -16,13 +17,20 @@ interface EventData {
 const SALT_ROUNDS = 10;
 
 export default async (event: FunctionEvent<EventData>) => {
-  console.log(event);
-
   try {
     const graphcool = fromEvent(event);
     const api = graphcool.api("simple/v1");
 
     const { email, password, accountActivated } = event.data;
+
+    // check if the email is valid
+    if (!validator.isEmail(email)) {
+      return {
+        error: {
+          message: "Not a valid Email",
+        },
+      };
+    }
 
     // get user by email
     const user: User = await getUserByEmail(api, email).then(r => r.User);
@@ -41,7 +49,8 @@ export default async (event: FunctionEvent<EventData>) => {
     if (!passwordIsCorrect) {
       return {
         error: {
-          message: "Invalid credentials!",
+          message:
+            "Wrong password. Try again or click Forgot password to reset it!",
         },
       };
     }
