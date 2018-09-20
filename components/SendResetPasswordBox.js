@@ -1,14 +1,7 @@
 import React, { Component } from "react";
 import { Mutation, withApollo } from "react-apollo";
-import gql from "graphql-tag";
 
-const SEND_RESET_PASSWORD = gql`
-  mutation sendResetPassword($userEmail: String!) {
-    sendResetPasswordEmail(email: $userEmail) {
-      result
-    }
-  }
-`;
+import { SEND_RESET_PASSWORD } from "../lib/queries";
 
 class SendResetPasswordBox extends Component {
   constructor(props) {

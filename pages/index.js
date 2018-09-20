@@ -1,6 +1,6 @@
 import React from "react";
 import cookie from "cookie";
-import { withApollo, compose } from "react-apollo";
+import { withApollo } from "react-apollo";
 
 import redirect from "../lib/redirect";
 import checkLoggedIn from "../lib/checkLoggedIn";
@@ -33,7 +33,6 @@ class Index extends React.Component {
   render() {
     return (
       <div>
-        {console.log(this.props.client)}
         Hello {this.props.loggedInUser.user.email}!<br />
         <button onClick={this.signout(this.props.client)}>Sign out</button>
       </div>

@@ -1,27 +1,9 @@
 import React, { Component } from "react";
 import { Mutation, Query } from "react-apollo";
-import gql from "graphql-tag";
+
+import { ACTIVATION_CODE, ACTIVATE_ACCOUNT } from "../lib/queries";
 
 import ActivateAccountBox from "../components/ActivateAccountBox";
-
-const ACTIVATION_CODE = gql`
-  query checkActivation($activationCode: ID!) {
-    AccountActivationCode(id: $activationCode) {
-      user {
-        accountActivated
-      }
-    }
-  }
-`;
-
-// Mutation : Activate the Account
-const ACTIVATE_ACCOUNT = gql`
-  mutation ActivateAccount($activationCode: ID!) {
-    activateAccount(id: $activationCode) {
-      result
-    }
-  }
-`;
 
 export default class ActivateAccount extends Component {
   render() {

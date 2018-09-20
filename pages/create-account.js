@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 
 import redirect from "../lib/redirect";
 import checkLoggedIn from "../lib/checkLoggedIn";

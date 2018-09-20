@@ -1,15 +1,8 @@
 import { Mutation, withApollo } from "react-apollo";
-import gql from "graphql-tag";
 import cookie from "cookie";
 import redirect from "../lib/redirect";
 
-const SIGN_IN = gql`
-  mutation authenticateUser($email: String!, $password: String!) {
-    authenticateUser(email: $email, password: $password) {
-      token
-    }
-  }
-`;
+import { SIGN_IN } from "../lib/queries";
 
 // TODO: Find a better name for component.
 const SigninBox = ({ client }) => {

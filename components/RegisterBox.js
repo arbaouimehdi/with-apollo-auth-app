@@ -1,36 +1,10 @@
 import React from "react";
 import { Mutation, withApollo } from "react-apollo";
-import gql from "graphql-tag";
 import cookie from "cookie";
 
+import { CREATE_USER, SEND_CONFIRMATION } from "../lib/queries";
+
 import SendConfirmationBox from "../components/SendConfirmationBox";
-
-const CREATE_USER = gql`
-  mutation Create($name: String!, $email: String!, $password: String!) {
-    signupUser(name: $name, email: $email, password: $password) {
-      id
-      token
-      name
-      email
-    }
-  }
-`;
-
-const SEND_CONFIRMATION = gql`
-  mutation SendConfirmation(
-    $userId: ID!
-    $userName: String!
-    $userEmail: String!
-  ) {
-    sendAccountActivationEmail(
-      id: $userId
-      name: $userName
-      email: $userEmail
-    ) {
-      result
-    }
-  }
-`;
 
 class RegisterBox extends React.Component {
   constructor(props) {

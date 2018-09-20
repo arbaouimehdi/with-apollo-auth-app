@@ -1,28 +1,10 @@
 import React, { Component } from "react";
 import { Mutation, Query } from "react-apollo";
-import gql from "graphql-tag";
 
 import withAuth from "../lib/withAuth";
+import { CURRENT_USER, RESET_PASSWORD } from "../lib/queries";
 
 import ResetPasswordConfirmationBox from "../components/ResetPasswordConfirmationBox";
-
-const CURRENT_USER = gql`
-  query {
-    user {
-      resetPassword {
-        id
-      }
-    }
-  }
-`;
-
-const RESET_PASSWORD = gql`
-  mutation resetPassword($passwordResetCode: ID!) {
-    resetPassword(id: $passwordResetCode) {
-      result
-    }
-  }
-`;
 
 class ResetPasswordConfirmation extends Component {
   render() {
