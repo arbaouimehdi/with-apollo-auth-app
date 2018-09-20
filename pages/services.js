@@ -6,14 +6,14 @@ class Services extends Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     return (
       <div>
-        <h1>Services</h1>
-        <span>current user: {this.props.user.email}</span>
+        <h1>Services Protected Page</h1>
       </div>
     );
   }
 }
 
-export default withAuth(session => session && session.userId)(Services);
+export default withAuth()(Services);

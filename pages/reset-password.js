@@ -1,18 +1,27 @@
 import React, { Component } from "react";
-import Link from "next/link";
+
+import redirect from "../lib/redirect";
+import checkLoggedIn from "../lib/checkLoggedIn";
 
 import SendResetPasswordBox from "../components/SendResetPasswordBox";
 
 class ResetPassword extends Component {
+  static async getInitialProps(context) {
+    const { loggedInUser } = await checkLoggedIn(context.apolloClient);
+
+    if (loggedInUser.user) {
+      // Already signed in? No need to continue.
+      // Throw them back to the main page
+      redirect(context, "/");
+    }
+
+    return {};
+  }
+
   render() {
     return (
       <React.Fragment>
         <SendResetPasswordBox />
-        <hr />
-        Already a member?{" "}
-        <Link prefetch href="/signin">
-          <a>Signin</a>
-        </Link>
       </React.Fragment>
     );
   }

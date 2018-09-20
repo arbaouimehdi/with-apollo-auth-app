@@ -1,11 +1,11 @@
 import React from "react";
 import cookie from "cookie";
-import { ApolloConsumer } from "react-apollo";
+import { withApollo, compose } from "react-apollo";
 
 import redirect from "../lib/redirect";
 import checkLoggedIn from "../lib/checkLoggedIn";
 
-export default class Index extends React.Component {
+class Index extends React.Component {
   static async getInitialProps(context, apolloClient) {
     const { loggedInUser } = await checkLoggedIn(context.apolloClient);
 
@@ -32,15 +32,13 @@ export default class Index extends React.Component {
 
   render() {
     return (
-      <ApolloConsumer>
-        {client => (
-          <div>
-            Hello! {this.props.loggedInUser.user.email}
-            <br />
-            <button onClick={this.signout(client)}>Sign out</button>
-          </div>
-        )}
-      </ApolloConsumer>
+      <div>
+        {console.log(this.props.client)}
+        Hello {this.props.loggedInUser.user.email}!<br />
+        <button onClick={this.signout(this.props.client)}>Sign out</button>
+      </div>
     );
   }
 }
+
+export default withApollo(Index);

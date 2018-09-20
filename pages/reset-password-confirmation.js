@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Mutation, Query } from "react-apollo";
 import gql from "graphql-tag";
 
+import withAuth from "../lib/withAuth";
+
 import ResetPasswordConfirmationBox from "../components/ResetPasswordConfirmationBox";
 
 const CURRENT_USER = gql`
@@ -60,7 +62,6 @@ class ResetPasswordConfirmation extends Component {
                   >
                     {(resetPassword, { data, error }) => (
                       <div>
-                        {console.log("xxxx")}
                         <ResetPasswordConfirmationBox
                           resetPassword={resetPassword}
                         />
@@ -83,4 +84,4 @@ class ResetPasswordConfirmation extends Component {
   }
 }
 
-export default ResetPasswordConfirmation;
+export default withAuth()(ResetPasswordConfirmation);

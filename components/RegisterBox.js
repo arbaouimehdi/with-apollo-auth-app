@@ -2,7 +2,6 @@ import React from "react";
 import { Mutation, withApollo } from "react-apollo";
 import gql from "graphql-tag";
 import cookie from "cookie";
-import redirect from "../lib/redirect";
 
 import SendConfirmationBox from "../components/SendConfirmationBox";
 
@@ -93,7 +92,6 @@ class RegisterBox extends React.Component {
                   error.graphQLErrors.map(({ functionError }, index) => (
                     <p key={`error-${index}`}>{functionError.message}</p>
                   ))}
-                <br />
                 <input
                   name="name"
                   placeholder="Name"
