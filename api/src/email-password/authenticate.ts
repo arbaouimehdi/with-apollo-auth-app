@@ -39,7 +39,7 @@ export default async (event: FunctionEvent<EventData>) => {
     if (!user) {
       return {
         error: {
-          message: "No user with this email exist!",
+          message: "Incorrect username or password.",
         },
       };
     }

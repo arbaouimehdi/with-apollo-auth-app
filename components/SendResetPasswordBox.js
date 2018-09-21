@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Mutation, withApollo } from "react-apollo";
+import { isEmail } from "validator";
 
 import { SEND_RESET_PASSWORD } from "../lib/queries";
 
@@ -8,12 +9,28 @@ class SendResetPasswordBox extends Component {
     super();
     this.state = {
       resetPasswordStatus: "NOT SENT",
+      formErrors: {
+        email: {
+          isEmail: false,
+        },
+      },
     };
   }
 
   handleError(error) {
     console.log(error);
   }
+
+  handleChangeEmail = e => {
+    this.setState({
+      resetPasswordStatus: this.state.resetPasswordStatus,
+      formErrors: {
+        email: {
+          isEmail: isEmail(e.target.value),
+        },
+      },
+    });
+  };
 
   render() {
     let email;
@@ -37,41 +54,52 @@ class SendResetPasswordBox extends Component {
         >
           {(sendResetPassword, { loading, error, data }) => {
             return (
-              <form
-                onSubmit={e => {
-                  e.preventDefault();
-                  e.stopPropagation();
+              <div className="authForm">
+                <form
+                  onSubmit={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
 
-                  sendResetPassword({
-                    variables: {
-                      userEmail: email.value,
-                    },
-                  });
+                    sendResetPassword({
+                      variables: {
+                        userEmail: email.value,
+                      },
+                    });
 
-                  email.value = "";
-                }}
-              >
-                {loading && <div>loading</div>}
-
-                {error &&
-                  error.graphQLErrors.map(({ functionError }, index) => (
-                    <p key={`error-${index}`}>
-                      {functionError ? functionError.message : ""}
-                    </p>
-                  ))}
-
-                <input
-                  name="email"
-                  placeholder="Email"
-                  ref={node => {
-                    email = node;
+                    email.value = "";
                   }}
-                  type="email"
-                  required
-                />
-                <br />
-                <button>Send Password</button>
-              </form>
+                >
+                  {loading && <div>loading</div>}
+
+                  {error &&
+                    error.graphQLErrors.map(({ functionError }, index) => (
+                      <p key={`error-${index}`}>
+                        {functionError ? functionError.message : ""}
+                      </p>
+                    ))}
+
+                  <div>
+                    <label htmlFor="email">Email</label>
+                    <input
+                      name="email"
+                      ref={node => {
+                        email = node;
+                      }}
+                      type="email"
+                      onChange={this.handleChangeEmail}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <button
+                      className="Btn Btn--primary"
+                      disabled={!this.state.formErrors.email.isEmail}
+                    >
+                      Send Password
+                    </button>
+                  </div>
+                </form>
+              </div>
             );
           }}
         </Mutation>

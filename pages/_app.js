@@ -22,7 +22,9 @@ class MyApp extends App {
         />
         <ApolloProvider client={apolloClient}>
           <Nav />
-          <Component {...pageProps} query={this.props.router.query} />
+          <main>
+            <Component {...pageProps} query={this.props.router.query} />
+          </main>
         </ApolloProvider>
       </Container>
     );

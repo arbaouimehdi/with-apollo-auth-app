@@ -20,6 +20,7 @@ export default class CreateAccount extends React.Component {
   render() {
     return (
       <React.Fragment>
+        <h1>Create account</h1>
         <RegisterBox />
       </React.Fragment>
     );

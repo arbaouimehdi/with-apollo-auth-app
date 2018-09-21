@@ -74,9 +74,7 @@ export default async (event: FunctionEvent<EventData>) => {
     
     Team team
     
-    If you never signed up to Team immediately email us at support@your-domain.com
-    
-    Activation code: ${accountActivationCode}`,
+    If you never signed up to Team immediately email us at support@your-domain.com`,
     );
 
     // // 4. Send request to Mailgun API

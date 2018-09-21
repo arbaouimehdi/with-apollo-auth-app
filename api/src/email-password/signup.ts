@@ -35,7 +35,7 @@ export default async (event: FunctionEvent<EventData>) => {
 
     if (
       // name - alphabet only
-      !validator.isAlpha(name) ||
+      !validator.isAlpha(name.replace(" ", "")) ||
       // name - between 4 & 20 characters
       !validator.isLength(name, { min: 4, max: 20 }) ||
       // email - not empty
@@ -43,7 +43,7 @@ export default async (event: FunctionEvent<EventData>) => {
       // email - valid email & alphanumeric
       !validator.isEmail(validator.escape(email)) ||
       // password - between 4 and 10
-      !validator.isLength(password, { min: 4, max: 10 })
+      !validator.isLength(password, { min: 6, max: 10 })
     ) {
       return {
         error: {

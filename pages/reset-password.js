@@ -21,6 +21,7 @@ class ResetPassword extends Component {
   render() {
     return (
       <React.Fragment>
+        <h1>Reset Password</h1>
         <SendResetPasswordBox />
       </React.Fragment>
     );

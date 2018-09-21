@@ -1,6 +1,7 @@
 import React from "react";
 import { Mutation, withApollo } from "react-apollo";
 import cookie from "cookie";
+import { isEmail, isLength } from "validator";
 
 import { CREATE_USER, SEND_CONFIRMATION } from "../lib/queries";
 
@@ -14,11 +15,82 @@ class RegisterBox extends React.Component {
       userId: "",
       userName: "",
       userEmail: "",
+      formErrors: {
+        email: {
+          isEmail: false,
+        },
+        name: {
+          isLength: false,
+        },
+        password: {
+          isLength: false,
+        },
+      },
     };
   }
 
   handleError = error => {
     console.log(error);
+  };
+
+  handleChangeName = e => {
+    this.setState({
+      createAccountStatus: this.state.createAccountStatus,
+      userId: this.state.userId,
+      userName: this.state.userName,
+      userEmail: this.state.userEmail,
+      formErrors: {
+        email: {
+          isEmail: this.state.formErrors.email.isEmail,
+        },
+        name: {
+          isLength: isLength(e.target.value, { min: 4, max: 20 }),
+        },
+        password: {
+          isLength: this.state.formErrors.password.isLength,
+        },
+      },
+    });
+  };
+
+  handleChangeEmail = e => {
+    this.setState({
+      createAccountStatus: this.state.createAccountStatus,
+      userId: this.state.userId,
+      userName: this.state.userName,
+      userEmail: this.state.userEmail,
+      formErrors: {
+        email: {
+          isEmail: isEmail(e.target.value),
+        },
+        name: {
+          isLength: this.state.formErrors.name.isLength,
+        },
+        password: {
+          isLength: this.state.formErrors.password.isLength,
+        },
+      },
+    });
+  };
+
+  handleChangePassword = e => {
+    this.setState({
+      createAccountStatus: this.state.createAccountStatus,
+      userId: this.state.userId,
+      userName: this.state.userName,
+      userEmail: this.state.userEmail,
+      formErrors: {
+        email: {
+          isEmail: this.state.formErrors.email.isEmail,
+        },
+        name: {
+          isLength: this.state.formErrors.name.isLength,
+        },
+        password: {
+          isLength: isLength(e.target.value, { min: 6, max: 20 }),
+        },
+      },
+    });
   };
 
   render() {
@@ -45,7 +117,7 @@ class RegisterBox extends React.Component {
           }}
         >
           {(create, { loading, error, data }) => (
-            <div>
+            <div className="authForm">
               <form
                 onSubmit={e => {
                   e.preventDefault();
@@ -66,39 +138,63 @@ class RegisterBox extends React.Component {
 
                 {error &&
                   error.graphQLErrors.map(({ functionError }, index) => (
-                    <p key={`error-${index}`}>{functionError.message}</p>
+                    <div className="Alert Alert--error" key={`error-${index}`}>
+                      {functionError.message}
+                    </div>
                   ))}
-                <input
-                  name="name"
-                  placeholder="Name"
-                  ref={node => {
-                    name = node;
-                  }}
-                  type="text"
-                  required
-                />
-                <br />
-                <input
-                  name="email"
-                  placeholder="Email"
-                  ref={node => {
-                    email = node;
-                  }}
-                  type="email"
-                  required
-                />
-                <br />
-                <input
-                  name="password"
-                  placeholder="Password"
-                  ref={node => {
-                    password = node;
-                  }}
-                  type="password"
-                  required
-                />
-                <br />
-                <button>Register</button>
+                <div>
+                  <label htmlFor="name">Name</label>
+                  <input
+                    name="name"
+                    ref={node => {
+                      name = node;
+                    }}
+                    type="text"
+                    onChange={this.handleChangeName}
+                    required
+                  />
+                  <small>Use at least 4 characters</small>
+                </div>
+                <div>
+                  <label htmlFor="email">Email</label>
+                  <input
+                    name="email"
+                    ref={node => {
+                      email = node;
+                    }}
+                    type="email"
+                    onChange={this.handleChangeEmail}
+                    required
+                  />
+                  <small>Use a valid email (eg: john@domain.com)</small>
+                </div>
+                <div>
+                  <label htmlFor="password">Password</label>
+                  <input
+                    name="password"
+                    ref={node => {
+                      password = node;
+                    }}
+                    type="password"
+                    onChange={this.handleChangePassword}
+                    required
+                  />
+                  <small>Use at least 6 and maximum 10 characters</small>
+                </div>
+                <div>
+                  <button
+                    className="Btn Btn--primary"
+                    disabled={
+                      this.state.formErrors.email.isEmail &&
+                      this.state.formErrors.name.isLength &&
+                      this.state.formErrors.password.isLength
+                        ? false
+                        : true
+                    }
+                  >
+                    Register
+                  </button>
+                </div>
               </form>
             </div>
           )}

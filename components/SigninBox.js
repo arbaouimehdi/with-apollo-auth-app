@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Mutation, withApollo } from "react-apollo";
 import cookie from "cookie";
+import { isEmail, isLength } from "validator";
 
 import redirect from "../lib/redirect";
-import { isEmail, isLength } from "validator";
 
 import { SIGN_IN } from "../lib/queries";
 
@@ -11,8 +11,6 @@ class SigninBox extends Component {
   constructor(props) {
     super();
     this.state = {
-      email: "",
-      password: "",
       formErrors: {
         email: {
           isEmail: false,
@@ -44,7 +42,7 @@ class SigninBox extends Component {
           isEmail: this.state.formErrors.email.isEmail,
         },
         password: {
-          isLength: isLength(e.target.value, { min: 4, max: 20 }),
+          isLength: isLength(e.target.value, { min: 6, max: 20 }),
         },
       },
     });
@@ -79,7 +77,7 @@ class SigninBox extends Component {
       >
         {(authenticateUser, { loading, error, data }) => {
           return (
-            <div>
+            <div className="authForm">
               <form
                 onSubmit={e => {
                   e.preventDefault();
@@ -99,44 +97,47 @@ class SigninBox extends Component {
 
                 {error &&
                   error.graphQLErrors.map(({ functionError }, index) => (
-                    <p key={`error-${index}`}>{functionError.message}</p>
+                    <div className="Alert Alert--error" key={`error-${index}`}>
+                      {functionError.message}
+                    </div>
                   ))}
-                <input
-                  name="email"
-                  placeholder="Email"
-                  ref={node => {
-                    email = node;
-                  }}
-                  type="text"
-                  onChange={this.handleChangeEmail}
-                  required
-                />
-                <br />
-                <input
-                  name="password"
-                  placeholder="Password"
-                  ref={node => {
-                    password = node;
-                  }}
-                  type="password"
-                  onChange={this.handleChangePassword}
-                  required
-                />
-                <br />
-<<<<<<< HEAD
-=======
-                {JSON.stringify(this.state.formErrors)}
->>>>>>> 175a51a92983a789177197539f638b7f43a0c16f
-                <button
-                  disabled={
-                    this.state.formErrors.email.isEmail &&
-                    this.state.formErrors.password.isLength
-                      ? false
-                      : true
-                  }
-                >
-                  Sign in
-                </button>
+                <div>
+                  <label htmlFor="email">Email</label>
+                  <input
+                    name="email"
+                    ref={node => {
+                      email = node;
+                    }}
+                    type="text"
+                    onChange={this.handleChangeEmail}
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="password">Password</label>
+                  <input
+                    name="password"
+                    ref={node => {
+                      password = node;
+                    }}
+                    type="password"
+                    onChange={this.handleChangePassword}
+                    required
+                  />
+                </div>
+                <div>
+                  <button
+                    className="Btn Btn--primary"
+                    disabled={
+                      this.state.formErrors.email.isEmail &&
+                      this.state.formErrors.password.isLength
+                        ? false
+                        : true
+                    }
+                  >
+                    Sign in
+                  </button>
+                </div>
               </form>
             </div>
           );
