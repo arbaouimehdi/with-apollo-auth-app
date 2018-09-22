@@ -73,9 +73,12 @@ class SendResetPasswordBox extends Component {
 
                   {error &&
                     error.graphQLErrors.map(({ functionError }, index) => (
-                      <p key={`error-${index}`}>
+                      <div
+                        className="Alert Alert--error"
+                        key={`error-${index}`}
+                      >
                         {functionError ? functionError.message : ""}
-                      </p>
+                      </div>
                     ))}
 
                   <div>

@@ -42,7 +42,7 @@ class SigninBox extends Component {
           isEmail: this.state.formErrors.email.isEmail,
         },
         password: {
-          isLength: isLength(e.target.value, { min: 6, max: 20 }),
+          isLength: isLength(e.target.value, { min: 6, max: 36 }),
         },
       },
     });

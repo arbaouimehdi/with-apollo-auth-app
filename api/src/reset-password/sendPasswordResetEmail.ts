@@ -86,7 +86,7 @@ export default async (event: FunctionEvent<EventData>) => {
     form.append("subject", "Password reset link");
     form.append(
       "text",
-      `A request to reset your password has been submitted. If this was not you please contact us immediately on support@youremail.com \n\n Please click on the following link to verify your email: ${passwordResetUrl} \n\n Or enter the following code: ${passwordResetCode} \n\n Thank you! \n\nTeam`,
+      `A request to reset your password has been submitted. If this was not you please contact us immediately on support@youremail.com \n\n Please click on the following link to verify your email: ${passwordResetUrl}  \n\n Thank you! \n\nTeam`,
     );
 
     // // 4. Send request to Mailgun API
