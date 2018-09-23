@@ -6,22 +6,20 @@ import * as validator from "validator";
 interface User {
   id: string;
   password: string;
+  accountActivated: boolean;
 }
 
 interface EventData {
   email: string;
   password: string;
-  accountActivated: boolean;
 }
-
-const SALT_ROUNDS = 10;
 
 export default async (event: FunctionEvent<EventData>) => {
   try {
     const graphcool = fromEvent(event);
     const api = graphcool.api("simple/v1");
 
-    const { email, password, accountActivated } = event.data;
+    const { email, password } = event.data;
 
     // check if the email is valid
     if (!validator.isEmail(email)) {
