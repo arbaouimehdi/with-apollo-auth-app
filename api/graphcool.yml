@@ -87,6 +87,14 @@ functions:
           MAILGUN_SUBDOMAIN: sandbox8a05d2181dc84b9c8764b6b9f414a98c.mailgun.org
           LOGIN_URL: http://localhost:3000/change-password
 
+  # Update the User Infos
+  updateUserInfos:
+    type: resolver
+    schema: src/user-settings/updateUserInfos.graphql
+    handler:
+      code:
+        src: src/user-settings/updateUserInfos.ts
+
 # Model/Relation permissions are used to limit the API access
 # To take the burden of thinking about those while development, we
 # preconfigured the wildcard ("*") permission that allows everything
@@ -108,6 +116,12 @@ permissions:
   - operation: PasswordResetCode.read
     fields:
       - id
+
+  # Only authenticated users can update their infos
+  - operation: User.update
+    authenticated: true
+    fields:
+      - name
 
 # Your root tokens used for functions to get full access to the API
 # Read more here:
