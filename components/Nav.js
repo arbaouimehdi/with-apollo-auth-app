@@ -18,6 +18,11 @@ class Nav extends React.Component {
             </Link>
           </li>
           <li>
+            <Link prefetch href="/settings/profile">
+              <a>User Settings</a>
+            </Link>
+          </li>
+          <li>
             <Link prefetch href="/signin">
               <a>Signin</a>
             </Link>
