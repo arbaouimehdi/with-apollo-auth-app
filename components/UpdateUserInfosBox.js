@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Query, Mutation, withApollo } from "react-apollo";
 import cookie from "cookie";
 
+import redirect from "../lib/redirect";
 import { CURRENT_USER, UPDATE_USER_INFOS } from "../lib/queries";
 
 class UpdateUserInfosBox extends Component {
@@ -37,6 +38,13 @@ class UpdateUserInfosBox extends Component {
                 mutation={UPDATE_USER_INFOS}
                 onCompleted={data => {}}
                 onError={error => {}}
+                // update={(cache, { data: { updateUserInfos } }) => {
+                //   const { user } = cache.readQuery({ query: CURRENT_USER });
+                //   cache.writeQuery({
+                //     query: CURRENT_USER,
+                //     data: { user: updateUserInfos },
+                //   });
+                // }}
               >
                 {(updateUserInfos, { loading, error, data }) => {
                   return (
@@ -53,6 +61,8 @@ class UpdateUserInfosBox extends Component {
                               newName: name.value,
                             },
                           });
+
+                          name.value = "";
                         }}
                       >
                         {loading && <div>Loading</div>}
@@ -69,12 +79,11 @@ class UpdateUserInfosBox extends Component {
                             ),
                           )}
 
-                        {data &&
-                          setTimeout(() => {
-                            <div className="Alert Alert--success">
-                              Updated Successfully
-                            </div>;
-                          }, 8000)}
+                        {data && (
+                          <div className="Alert Alert--success">
+                            Updated Successfully
+                          </div>
+                        )}
 
                         <div>
                           <label htmlFor="name">Name</label>
