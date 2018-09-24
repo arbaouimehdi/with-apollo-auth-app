@@ -150,6 +150,7 @@ class RegisterBox extends React.Component {
                       name = node;
                     }}
                     type="text"
+                    className="Input Input-Text"
                     onChange={this.handleChangeName}
                     required
                   />
@@ -163,6 +164,7 @@ class RegisterBox extends React.Component {
                       email = node;
                     }}
                     type="email"
+                    className="Input Input-Text"
                     onChange={this.handleChangeEmail}
                     required
                   />
@@ -176,6 +178,7 @@ class RegisterBox extends React.Component {
                       password = node;
                     }}
                     type="password"
+                    className="Input Input-Text"
                     onChange={this.handleChangePassword}
                     required
                   />

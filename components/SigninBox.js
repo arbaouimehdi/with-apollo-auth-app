@@ -109,6 +109,7 @@ class SigninBox extends Component {
                       email = node;
                     }}
                     type="text"
+                    className="Input Input-Text"
                     onChange={this.handleChangeEmail}
                     required
                   />
@@ -121,6 +122,7 @@ class SigninBox extends Component {
                       password = node;
                     }}
                     type="password"
+                    className="Input Input-Text"
                     onChange={this.handleChangePassword}
                     required
                   />

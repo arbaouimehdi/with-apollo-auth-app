@@ -89,6 +89,7 @@ class SendResetPasswordBox extends Component {
                         email = node;
                       }}
                       type="email"
+                      className="Input Input-Text"
                       onChange={this.handleChangeEmail}
                       required
                     />
