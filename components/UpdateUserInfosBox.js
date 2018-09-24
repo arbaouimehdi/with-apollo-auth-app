@@ -25,7 +25,7 @@ class UpdateUserInfosBox extends Component {
 
     return (
       <Query query={CURRENT_USER}>
-        {({ data, loading, error, refetch }) => {
+        {({ data, loading, error }) => {
           if (loading) return <div>loading</div>;
 
           if (error) return console.log(error);
@@ -36,15 +36,22 @@ class UpdateUserInfosBox extends Component {
             return (
               <Mutation
                 mutation={UPDATE_USER_INFOS}
-                onCompleted={data => {}}
-                onError={error => {}}
-                // update={(cache, { data: { updateUserInfos } }) => {
-                //   const { user } = cache.readQuery({ query: CURRENT_USER });
-                //   cache.writeQuery({
-                //     query: CURRENT_USER,
-                //     data: { user: updateUserInfos },
-                //   });
-                // }}
+                update={(cache, { data: { updateUserInfos } }) => {
+                  let { user } = cache.readQuery({ query: CURRENT_USER });
+                  console.log(updateUserInfos.name);
+                  cache.writeQuery({
+                    query: CURRENT_USER,
+                    data: {
+                      user: {
+                        id: user.id,
+                        name: updateUserInfos.name,
+                        email: user.email,
+                        accountActivated: user.accountActivated,
+                        __typename: "UpdateUserInfosPayload",
+                      },
+                    },
+                  });
+                }}
               >
                 {(updateUserInfos, { loading, error, data }) => {
                   return (
@@ -57,12 +64,12 @@ class UpdateUserInfosBox extends Component {
                           updateUserInfos({
                             variables: {
                               token:
-                                "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDAzMjIyOTQsImlhdCI6MTUzNzczMDI5NCwicHJvamVjdElkIjoiY2ptM2hnMXo2MTN6ZjAxNDVpaGw1aG5qNyIsInVzZXJJZCI6ImNqbWV1MjNmeTBnbTcwMTM0eXJsZnU1YmgiLCJtb2RlbE5hbWUiOiJVc2VyIn0.j5HzTsHdRNYmfheqldDjG0T0Ro9dVzhpSVKhQWJFrsg",
+                                "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDAzODU1MzYsImlhdCI6MTUzNzc5MzUzNiwicHJvamVjdElkIjoiY2ptZzYxaXFrMDAwNDAxMTM1dDJ2ZDdzNyIsInVzZXJJZCI6ImNqbWc2bWhxeTAwZHcwMTEzMnkzaGI3NmQiLCJtb2RlbE5hbWUiOiJVc2VyIn0.88qRoxr52v-SaNhhnYaDQlTzhvSXMNFqE4JLvpHD2AY",
                               newName: name.value,
                             },
                           });
 
-                          name.value = "";
+                          // name.value = "";
                         }}
                       >
                         {loading && <div>Loading</div>}
@@ -79,6 +86,7 @@ class UpdateUserInfosBox extends Component {
                             ),
                           )}
 
+                        {/* Updated Successfully */}
                         {data && (
                           <div className="Alert Alert--success">
                             Updated Successfully

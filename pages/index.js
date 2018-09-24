@@ -33,7 +33,7 @@ class Index extends React.Component {
   render() {
     return (
       <div>
-        Hello {this.props.loggedInUser.user.email}!<br />
+        Hello {this.props.loggedInUser.user.name}!<br />
         <button onClick={this.signout(this.props.client)}>Sign out</button>
       </div>
     );
