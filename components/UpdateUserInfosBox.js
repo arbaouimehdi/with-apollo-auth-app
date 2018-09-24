@@ -63,9 +63,9 @@ class UpdateUserInfosBox extends Component {
 
                           updateUserInfos({
                             variables: {
-                              token:
-                                "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDAzODU1MzYsImlhdCI6MTUzNzc5MzUzNiwicHJvamVjdElkIjoiY2ptZzYxaXFrMDAwNDAxMTM1dDJ2ZDdzNyIsInVzZXJJZCI6ImNqbWc2bWhxeTAwZHcwMTEzMnkzaGI3NmQiLCJtb2RlbE5hbWUiOiJVc2VyIn0.88qRoxr52v-SaNhhnYaDQlTzhvSXMNFqE4JLvpHD2AY",
+                              token: document.cookie.replace("token=", ""),
                               newName: name.value,
+                              yep: document,
                             },
                           });
 
