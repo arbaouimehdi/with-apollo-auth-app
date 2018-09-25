@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Query, Mutation, withApollo } from "react-apollo";
-import cookie from "cookie";
+import { isLength } from "validator";
 
-import redirect from "../lib/redirect";
 import { CURRENT_USER, UPDATE_USER_INFOS } from "../lib/queries";
 
 class UpdateUserInfosBox extends Component {
@@ -11,17 +10,73 @@ class UpdateUserInfosBox extends Component {
     this.state = {
       name: "",
       email: "",
+      formErrors: {
+        name: {
+          isLength: true,
+        },
+        oldPassword: {
+          isLength: false,
+        },
+        newPassword: {
+          isLength: false,
+        },
+      },
     };
   }
 
   onChangeName = e => {
     this.setState({
       name: e.target.value,
+      formErrors: {
+        name: {
+          isLength: isLength(e.target.value, { min: 4, max: 20 }),
+        },
+        oldPassword: {
+          isLength: this.state.formErrors.oldPassword.isLength,
+        },
+        newPassword: {
+          isLength: this.state.formErrors.newPassword.isLength,
+        },
+      },
+    });
+  };
+
+  onChangeOldPassword = e => {
+    this.setState({
+      name: e.target.value,
+      formErrors: {
+        name: {
+          isLength: this.state.formErrors.name.isLength,
+        },
+        oldPassword: {
+          isLength: isLength(e.target.value, { min: 4, max: 20 }),
+        },
+        newPassword: {
+          isLength: this.state.formErrors.newPassword.isLength,
+        },
+      },
+    });
+  };
+
+  onChangeNewPassword = e => {
+    this.setState({
+      name: e.target.value,
+      formErrors: {
+        name: {
+          isLength: this.state.formErrors.name.isLength,
+        },
+        oldPassword: {
+          isLength: this.state.formErrors.oldPassword.isLength,
+        },
+        newPassword: {
+          isLength: isLength(e.target.value, { min: 4, max: 20 }),
+        },
+      },
     });
   };
 
   render() {
-    let name;
+    let name, oldPassword, newPassword;
 
     return (
       <Query query={CURRENT_USER}>
@@ -65,11 +120,12 @@ class UpdateUserInfosBox extends Component {
                             variables: {
                               token: document.cookie.replace("token=", ""),
                               newName: name.value,
-                              yep: document,
+                              oldPassword: oldPassword.value,
+                              newPassword: newPassword.value,
                             },
                           });
 
-                          // name.value = "";
+                          oldPassword.value = newPassword.value = "";
                         }}
                       >
                         {loading && <div>Loading</div>}
@@ -107,6 +163,30 @@ class UpdateUserInfosBox extends Component {
                           />
                         </div>
                         <div>
+                          <label htmlFor="oldPassword">Old Password</label>
+                          <input
+                            type="text"
+                            name="oldPassword"
+                            ref={node => {
+                              oldPassword = node;
+                            }}
+                            className="Input Input-Text"
+                            onChange={this.onChangeOldPassword}
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="newPassword">New Password</label>
+                          <input
+                            type="text"
+                            name="newPassword"
+                            ref={node => {
+                              newPassword = node;
+                            }}
+                            className="Input Input-Text"
+                            onChange={this.onChangeNewPassword}
+                          />
+                        </div>
+                        <div>
                           <label htmlFor="email">Email</label>
                           <input
                             type="text"
@@ -117,7 +197,18 @@ class UpdateUserInfosBox extends Component {
                           />
                         </div>
                         <div>
-                          <button className="Btn Btn--primary">Update</button>
+                          <button
+                            className="Btn Btn--primary"
+                            disabled={
+                              this.state.formErrors.name.isLength &&
+                              this.state.formErrors.oldPassword.isLength &&
+                              this.state.formErrors.newPassword.isLength
+                                ? false
+                                : true
+                            }
+                          >
+                            Update
+                          </button>
                         </div>
                       </form>
                     </div>

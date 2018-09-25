@@ -70,6 +70,12 @@ export default async (event: FunctionEvent<EventData>) => {
       r => r.User,
     );
 
+    /**
+     *
+     * Update Name Only
+     *
+     */
+
     // Check the name field
     if (
       // newName - alphabet only
@@ -84,13 +90,16 @@ export default async (event: FunctionEvent<EventData>) => {
       };
     }
 
-    /**
-     *
-     * Update Name Only
-     *
-     */
+    // update the name
     if (oldPassword == "" && newPassword == "") {
       updatedUser = await updateUser(api, user.id, newName);
+
+      // Return the updated Infos
+      return {
+        data: {
+          name: updatedUser.name,
+        },
+      };
     }
 
     if (
@@ -136,8 +145,8 @@ export default async (event: FunctionEvent<EventData>) => {
     const salt = bcrypt.genSaltSync(SALT_ROUNDS);
     const hash = await bcrypt.hash(newPassword, salt);
 
-    // Update the User Infos
-    updatedUser = await updateUser(api, user.id, user.name, hash);
+    // update the password
+    updatedUser = await updateUser(api, user.id, newName, hash);
 
     // Return the updated Infos
     return {
