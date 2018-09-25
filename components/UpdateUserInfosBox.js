@@ -168,9 +168,6 @@ class UpdateUserInfosBox extends Component {
                           />
                         </div>
                         <div>
-                          {console.log(
-                            this.state.formErrors.oldPassword.isLength,
-                          )}
                           <button
                             className="Btn Btn--primary"
                             disabled={
