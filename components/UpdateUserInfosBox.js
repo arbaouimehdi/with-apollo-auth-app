@@ -9,16 +9,18 @@ class UpdateUserInfosBox extends Component {
     super(props);
     this.state = {
       name: "",
+      oldPassword: "",
+      newPassword: "",
       email: "",
       formErrors: {
         name: {
           isLength: true,
         },
         oldPassword: {
-          isLength: false,
+          isLength: true,
         },
         newPassword: {
-          isLength: false,
+          isLength: true,
         },
       },
     };
@@ -36,40 +38,6 @@ class UpdateUserInfosBox extends Component {
         },
         newPassword: {
           isLength: this.state.formErrors.newPassword.isLength,
-        },
-      },
-    });
-  };
-
-  onChangeOldPassword = e => {
-    this.setState({
-      name: e.target.value,
-      formErrors: {
-        name: {
-          isLength: this.state.formErrors.name.isLength,
-        },
-        oldPassword: {
-          isLength: isLength(e.target.value, { min: 4, max: 20 }),
-        },
-        newPassword: {
-          isLength: this.state.formErrors.newPassword.isLength,
-        },
-      },
-    });
-  };
-
-  onChangeNewPassword = e => {
-    this.setState({
-      name: e.target.value,
-      formErrors: {
-        name: {
-          isLength: this.state.formErrors.name.isLength,
-        },
-        oldPassword: {
-          isLength: this.state.formErrors.oldPassword.isLength,
-        },
-        newPassword: {
-          isLength: isLength(e.target.value, { min: 4, max: 20 }),
         },
       },
     });
@@ -124,8 +92,6 @@ class UpdateUserInfosBox extends Component {
                               newPassword: newPassword.value,
                             },
                           });
-
-                          oldPassword.value = newPassword.value = "";
                         }}
                       >
                         {loading && <div>Loading</div>}
@@ -161,35 +127,40 @@ class UpdateUserInfosBox extends Component {
                             defaultValue={user.name}
                             onChange={this.onChangeName}
                           />
+                          <small>Use at least 4 characters</small>
                         </div>
                         <div>
                           <label htmlFor="oldPassword">Old Password</label>
                           <input
-                            type="text"
+                            type="password"
                             name="oldPassword"
                             ref={node => {
                               oldPassword = node;
                             }}
                             className="Input Input-Text"
-                            onChange={this.onChangeOldPassword}
                           />
+                          <small>
+                            Use at least 6 and maximum 10 characters
+                          </small>
                         </div>
                         <div>
                           <label htmlFor="newPassword">New Password</label>
                           <input
-                            type="text"
+                            type="password"
                             name="newPassword"
                             ref={node => {
                               newPassword = node;
                             }}
                             className="Input Input-Text"
-                            onChange={this.onChangeNewPassword}
                           />
+                          <small>
+                            Use at least 6 and maximum 10 characters
+                          </small>
                         </div>
                         <div>
                           <label htmlFor="email">Email</label>
                           <input
-                            type="text"
+                            type="email"
                             name="email"
                             className="Input Input-Text Input-Text--disabled"
                             defaultValue={user.email}
@@ -197,12 +168,14 @@ class UpdateUserInfosBox extends Component {
                           />
                         </div>
                         <div>
+                          {console.log(
+                            this.state.formErrors.oldPassword.isLength,
+                          )}
                           <button
                             className="Btn Btn--primary"
                             disabled={
                               this.state.formErrors.name.isLength &&
-                              this.state.formErrors.oldPassword.isLength &&
-                              this.state.formErrors.newPassword.isLength
+                              this.state.formErrors.oldPassword.isLength
                                 ? false
                                 : true
                             }
