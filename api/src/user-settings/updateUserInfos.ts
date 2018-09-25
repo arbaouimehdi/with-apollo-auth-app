@@ -1,11 +1,14 @@
 import { fromEvent, FunctionEvent } from "graphcool-lib";
 import { GraphQLClient } from "graphql-request";
+import * as bcrypt from "bcryptjs";
 import * as validator from "validator";
 
 // Query Parameters
 interface EventData {
   token: string;
   newName: string;
+  oldPassword: string;
+  newPassword: string;
 }
 
 interface UpdatedUser {
@@ -17,17 +20,24 @@ interface User {
   id: string;
   name: string;
   email: string;
+  password: string;
 }
 
 interface LoggedInUser {
   id: string;
 }
 
+const SALT_ROUNDS = 10;
+
 export default async (event: FunctionEvent<EventData>) => {
   console.log(event);
 
   try {
-    const { token, newName } = event.data;
+    let updatedUser: UpdatedUser = {
+      id: "",
+      name: "",
+    };
+    const { token, newName, oldPassword, newPassword } = event.data;
 
     const graphcool = fromEvent(event);
     const api = graphcool.api("simple/v1", { token });
@@ -60,7 +70,7 @@ export default async (event: FunctionEvent<EventData>) => {
       r => r.User,
     );
 
-    // Check the updated fields
+    // Check the name field
     if (
       // newName - alphabet only
       !validator.isAlpha(newName.replace(" ", "")) ||
@@ -69,13 +79,65 @@ export default async (event: FunctionEvent<EventData>) => {
     ) {
       return {
         error: {
-          message: "Update User Infos Failed",
+          message: "Update Name Failed",
         },
       };
     }
 
-    // Update the infos
-    const updatedUser: UpdatedUser = await updateUser(api, user.id, newName);
+    /**
+     *
+     * Update Name Only
+     *
+     */
+    if (oldPassword == "" && newPassword == "") {
+      updatedUser = await updateUser(api, user.id, newName);
+    }
+
+    if (
+      // between 4 and 10 characters
+      !validator.isLength(oldPassword, { min: 6, max: 10 }) ||
+      !validator.isLength(newPassword, { min: 6, max: 10 })
+    ) {
+      return {
+        error: {
+          message: "Update Password Failed",
+        },
+      };
+    }
+
+    /**
+     *
+     * Update Password
+     *
+     */
+
+    // get user current password
+    const currentPassword = user.password;
+
+    // Check if the Old Password is similar to the Current Password
+    if (!bcrypt.compareSync(oldPassword, currentPassword)) {
+      return {
+        error: {
+          message: "The Current Password is Wrong",
+        },
+      };
+    }
+
+    // Check if the New Password is Equal to the Current Password
+    if (bcrypt.compareSync(newPassword, currentPassword)) {
+      return {
+        error: {
+          message: "The New Password is similar to the Old password",
+        },
+      };
+    }
+
+    // create password hash
+    const salt = bcrypt.genSaltSync(SALT_ROUNDS);
+    const hash = await bcrypt.hash(newPassword, salt);
+
+    // Update the User Infos
+    updatedUser = await updateUser(api, user.id, user.name, hash);
 
     // Return the updated Infos
     return {
@@ -100,6 +162,7 @@ async function getUserByID(api: GraphQLClient, id: string): Promise<{ User }> {
         id
         name
         email
+        password
       }
     }
   `;
@@ -126,10 +189,11 @@ async function updateUser(
   api: GraphQLClient,
   loggedInUserID: string,
   newName: string,
+  newPassword?: string,
 ): Promise<UpdatedUser> {
   const mutation = `
-    mutation updateUser($loggedInUserID: ID!, $newName: String!) {
-      updateUser(id: $loggedInUserID, name: $newName) {
+    mutation updateUser($loggedInUserID: ID!, $newName: String!, $newPassword: String) {
+      updateUser(id: $loggedInUserID, name: $newName, password: $newPassword) {
         name
       }
     }
@@ -137,6 +201,7 @@ async function updateUser(
   const variables = {
     loggedInUserID,
     newName,
+    newPassword,
   };
 
   return api
